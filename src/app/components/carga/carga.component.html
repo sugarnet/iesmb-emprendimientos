@@ -1,0 +1,61 @@
+<h1>Crear de emprendimiento</h1>
+<hr>
+<form [formGroup]="forma" (ngSubmit)="guardarCambios()" novalidate>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Datos de carga</h4>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-12">
+            <input class="form-control" type="text" placeholder="Título" formControlName="title" 
+                [ngClass]="{'is-invalid': isFieldValid('title')}">
+            <div class="invalid-feedback" *ngIf="forma.controls['title'].errors?.required">
+                Requerido
+            </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-md-12">
+            <textarea class="form-control" rows="3" placeholder="Descripción" formControlName="description"></textarea>
+        </div>
+      </div>
+
+      <div class="row">
+          <div class="col-md-4">
+              <h4>Seleccione archivos</h4>
+              <div appNgDropFiles [archivos]="archivos" (mouseSobre)="estaSobreElemento = $event" [ngClass]="{'file-over': estaSobreElemento}" class="well drop-zone file-over">
+                  <h4>Deje caer aquí los archivos</h4>
+                  <img src="assets/drop-images.png">
+              </div>
+          </div>
+      
+          <div class="col-md-8">
+              <h4>Cargar archivos</h4>
+              <button (click)="guardar()" class="btn btn-primary" [disabled]="archivos.length == 0 || forma.invalid">Guardar</button>
+              <button (click)="limpiarArchivos()" class="btn btn-secondary ml-1">Limpiar</button>
+      
+              <table class="table">
+                  <thead class="thead-dark">
+                      <tr>
+                          <th>Nombre</th>
+                          <th>Tamaño (MB)</th>
+                          <th>Progreso</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let archivo of archivos">
+                          <td [ngClass]="{'text-green': archivo.progreso >= 100}">{{ archivo.nombreArchivo }}</td>
+                          <td>{{ archivo.archivo.size / 1024 / 1024 | number:'.2-2' }}</td>
+                          <td>
+                              <div class="progress">
+                                  <div class="progress-bar" role="progressbar" [ngStyle]="{'width': archivo.progreso + '%'}"></div>
+                              </div>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+</form>
